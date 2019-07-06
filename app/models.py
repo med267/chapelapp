@@ -1,19 +1,23 @@
 from datetime import datetime
-from app import db
+from app import db, login
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from hashlib import md5
 
-""" # Youtube CH6 Userauth 22:00 left off
-@login_manager.user_loader
+# Youtube CH6 Userauth 22:00 left off
+@login.user_loader
 def load_user(user_id):
-    return Authuser.query.get(int(user_id)) """
+    return Authuser.query.get(int(user_id))
 
 #My Authuser Class for chapel photo db
-class Authuser(db.Model):
+class Authuser(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='mb.jpg')
     password_hash = db.Column(db.String(128))
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     couples = db.relationship('Couple', backref='authuser', lazy=True) # See 16:10min YT
     wedding_package = db.relationship('Weddingpackage', backref='authuser', lazy=True)
 
@@ -26,6 +30,10 @@ class Authuser(db.Model):
     def __repr__(self):
         return f"Authorized User('{self.username}', '{self.email}', '{self.image_file}')"
 
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
 
 class Couple(db.Model):   # Called Couple for initial record. Sometimes other ppl pay im calling them customers
     id = db.Column(db.Integer, primary_key=True)
