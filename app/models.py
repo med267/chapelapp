@@ -4,10 +4,11 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 
-# Youtube CH6 Userauth 22:00 left off
-@login.user_loader
-def load_user(user_id):
-    return Authuser.query.get(int(user_id))
+
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('authuser.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('authuser.id'))
+)
 
 #My Authuser Class for chapel photo db
 class Authuser(UserMixin, db.Model):
@@ -20,6 +21,11 @@ class Authuser(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     couples = db.relationship('Couple', backref='authuser', lazy=True) # See 16:10min YT
     wedding_package = db.relationship('Weddingpackage', backref='authuser', lazy=True)
+    followed = db.relationship(
+        'Authuser', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -34,6 +40,31 @@ class Authuser(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
+
+    def followed_posts(self):
+        followed = Couple.query.join(
+            followers, (followers.c.followed_id == Couple.user_id)).filter(
+                followers.c.follower_id == self.id)
+        own = Couple.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Couple.timestamp.desc())
+
+# Youtube CH6 Userauth 22:00 left off
+@login.user_loader
+def load_user(user_id):
+    return Authuser.query.get(int(user_id))
+
 
 class Couple(db.Model):   # Called Couple for initial record. Sometimes other ppl pay im calling them customers
     id = db.Column(db.Integer, primary_key=True)

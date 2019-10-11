@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Couple Registration</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.p1_first_name.label }}<br>
+            {{ form.p1_first_name(size=30) }}<br>
+            {% for error in form.p1_first_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.p1_surname.label }}<br>
+            {{ form.p1_surname(size=64) }}<br>
+            {% for error in form.p1_surname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.p2_first_name.label }}<br>
+            {{ form.p2_first_name(size=30) }}<br>
+            {% for error in form.p2_first_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.p2_surname.label }}<br>
+            {{ form.p2_surname(size=64) }}<br>
+            {% for error in form.p2_surname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.mail_street_address_1.label }}<br>
+            {{ form.mail_street_address_1(size=30) }}<br>
+            {% for error in form.mail_street_address_1.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.mail_street_address_2.label }}<br>
+            {{ form.mail_street_address_2(size=64) }}<br>
+            {% for error in form.mail_street_address_2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

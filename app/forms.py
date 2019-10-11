@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
-from app.models import Authuser
+from app.models import Authuser, Couple
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -26,6 +26,31 @@ class RegistrationForm(FlaskForm):
         user = Authuser.query.filter_by(email=email.data).first()
         if user is not None:
           raise ValidationError('Please use a different email address.')
+
+
+class CoupleForm(FlaskForm):
+    p1_first_name = StringField('Client 1 First Name: ', validators=[DataRequired()])
+    p1_surname = StringField('Client 1 Last/Family/Surname Name: ', validators=[DataRequired()])
+    p2_first_name = StringField('Client 2 First Name: ', validators=[DataRequired()])
+    p2_surname = StringField('Client 2 Last/Family/Surname Name: ', validators=[DataRequired()])
+    email_p1 = StringField('Primary Email', validators=[DataRequired(), Email()])
+    email_p2 = StringField('Alternate Email', validators=[Email()])
+    mail_street_address_1 = StringField('Street Address 1: ')
+    mail_street_address_2 = StringField('Street Address 2: ')
+    mail_city = StringField('City/Town/Village: ')
+    mail_state_province = StringField('State/Province/Region: ')
+    mail_country = StringField('Country: ')
+    mail_postal_code = StringField('Postal Code: ')
+    telephone_number = StringField('Telephone Number: ')
+    note = TextAreaField('Note: ')
+    submit = SubmitField('Register')
+
+
+    def validate_email(self, email):
+        user = Authuser.query.filter_by(email=email_p1.data).first()
+        if user is not None:
+          raise ValidationError('Please use a different email address.')
+
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

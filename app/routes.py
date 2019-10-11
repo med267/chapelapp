@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, CoupleForm, EditProfileForm
 from app.models import Authuser
 
 @app.before_request
@@ -68,6 +68,32 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+#Create route for Couples Form
+@app.route('/registercouple', methods=['GET', 'POST'])
+def registercouple():
+    if current_user.is_authenticated:
+        form = CoupleForm()
+        if form.validate_on_submit():
+            couple = Couple(
+                p1_first_name=form.p1_first_name.data,
+                p1_surname=form.p1_surname.data,
+                p2_first_name=form.p2_surname.data,
+                p2_surname=form.p2_surname.data,
+                mail_street_address_1=form.mail_street_address_1.data,
+                mail_street_address_2=form.mail_street_address_2.data,
+                mail_city=form.mail_city.data,
+                mail_state_province=form.mail_state_province.data,
+                mail_country=form.mail_country.data,
+                telephone_number=form.telephone_number.data,
+                note=form.note.data,
+                email=form.email.data
+                )
+            db.session.add(couple)
+            db.session.commit()
+            flash('Congratulations, you have now registered the couple!')
+            return redirect(url_for('login'))
+        return render_template('register_couple.html', title='Couple Registration!', form=form)
+
 #Create support for profile page
 @app.route('/user/<username>')
 @login_required
@@ -93,5 +119,4 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile',
-                           form=form)
+    return render_template('edit_profile.html', title='Edit Profile', form=form)
