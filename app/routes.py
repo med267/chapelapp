@@ -84,9 +84,11 @@ def registercouple():
                 mail_city=form.mail_city.data,
                 mail_state_province=form.mail_state_province.data,
                 mail_country=form.mail_country.data,
+                mail_postal_code=form.mail_postal_code.data,
+                email_p1=form.email_p1.data,
+                email_p2=form.email_p2.data,
                 telephone_number=form.telephone_number.data,
-                note=form.note.data,
-                email=form.email.data
+                note=form.note.data
                 )
             db.session.add(couple)
             db.session.commit()

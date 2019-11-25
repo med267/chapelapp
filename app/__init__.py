@@ -16,6 +16,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 
+
 if not app.debug:
     if app.config['MAIL_SERVER']:
         auth = None
@@ -45,6 +46,8 @@ if not app.debug:
     app.logger.info('Microblog startup')
 
 from app import routes, models, errors
+
+
 
 """ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt

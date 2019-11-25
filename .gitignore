@@ -97,3 +97,14 @@ ENV/
 #txt
 *.txt
 README.md
+logs/microblog.log.1
+logs/microblog.log.1
+logs/microblog.log.2
+logs/microblog.log.3
+logs/microblog.log.4
+logs/microblog.log.5
+logs/microblog.log.6
+logs/microblog.log.7
+logs/microblog.log.8
+logs/microblog.log.9
+logs/microblog.log.10

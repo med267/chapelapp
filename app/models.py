@@ -83,7 +83,7 @@ class Couple(db.Model):   # Called Couple for initial record. Sometimes other pp
     telephone_number = db.Column(db.String(120), unique=True, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     note = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('authuser.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('authuser.id'))
     # Above I believe this records who FK created the record https://youtu.be/cYWiDiIUxQc?t=919
 
     def __repr__(self):
@@ -96,7 +96,7 @@ class Weddingpackage(db.Model):   # Wedding Pkgs/ Need to make a pkg ie Earth An
     wedding_package_desc = db.Column(db.Text, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('authuser.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('authuser.id'))
     # Above I believe this records who FK created the record https://youtu.be/cYWiDiIUxQc?t=919
     #couple_id = db.Column(db.Integer, db.ForeignKey('couple.id'), nullable=False)
     # Above I believe this records who FK created the record https://youtu.be/cYWiDiIUxQc?t=919

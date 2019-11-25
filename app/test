@@ -1,0 +1,9 @@
+c = Couple(p1_first_name='lolo',p1_surname='madiera',p2_first_name='oskar',p2_surname='kuty',
+mail_street_address_1='240 West Owatonna',mail_city='duluth',mail_state_province='mn',
+mail_country='USA',mail_postal_code='55803',email_p1='lolo@mail.com',email_p2='oskar@super.com',
+telephone_number='218-728-3110',note='sisu!!!!')
+
+
+for c in couples:
+    print(c.id, c.p1_first_name.title() + " " + c.p1_surname.title() + " & " + c.p2_first_name.title() + " " + c.p2_surname.title() + "\n"
+    )
